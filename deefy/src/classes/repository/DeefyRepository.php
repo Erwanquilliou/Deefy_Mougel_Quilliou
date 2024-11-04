@@ -154,4 +154,29 @@ public function findPlaylistById(int $id): lists\Playlist {
             $stmt->execute();
         }
     }
+    public function verifIdRegister(String $email) : array{
+        $sql ="select count(*) from user where email = :email ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':email',$email);
+        $stmt->execute();
+        $result = $stmt->fetchColumn(); 
+        if ($result == 0){
+            return [true,null];
+        }
+        $stmt = $this->pdo->prepare("select passwd from user where email = :email");
+        $stmt->bindParam(':email',$email);
+        $stmt->execute();
+        $passwd = $stmt->fetchColumn();
+        return[false,$passwd];
+    }
+
+    public function register(String $email,string $password){
+        $sql ="insert into user(email,passwd,role) values(:email,:pwd,:role)";
+        $role = 1;
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':email',$email);
+        $stmt->bindParam(':pwd',$password);
+        $stmt->bindParam(':role',$role);
+        $stmt->execute();
+    }
 }

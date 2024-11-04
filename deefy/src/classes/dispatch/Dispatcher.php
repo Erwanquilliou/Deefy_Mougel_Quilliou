@@ -34,6 +34,15 @@ class Dispatcher
                 $action = new act\AddTrackAction();
                 $html = $action->execute();
                 break;
+            case 'signin' : 
+                $action = new act\SignInAction();
+                $html = $action->execute();
+                break;
+            case 'register' : 
+                $action = new act\RegisterAction();
+                $html = $action->execute();
+                break;
+            
         }
         $this->renderPage($html);
     }
@@ -54,6 +63,8 @@ class Dispatcher
          <li><a href="?action=playlist">Afficher la playlist en session</a></li>
          <li><a href="?action=add-playlist">Ajouter une playlist</a></li>
          <li><a href="?action=add-track">Ajouter une track dans la playlist</a></li>
+         <li><a href="?action=signin">se connecter</a></li>
+         <li><a href="?action=register">s'enregistrer</a></li>
     </ul>
     $html
 </body>

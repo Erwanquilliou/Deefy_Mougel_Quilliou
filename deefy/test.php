@@ -10,8 +10,9 @@ $playlists = $repo->findAllPlaylists();
 foreach ($playlists as $pl) {
     print "playlist  : " . $pl->nom . ":". $pl->id . "</br>";
 }
-
-
+\iutnc\deefy\auth\AuthnProvider::signin("user2@mail.com","user2");
+echo $_SESSION['user'];
+//\iutnc\deefy\auth\AuthnProvider::register("user1@mail.co","eedkkdkddhd");
 //$pl = new \iutnc\deefy\audio\lists\PlayList('test');
 //$pl = $repo->saveEmptyPlaylist($pl);
 
