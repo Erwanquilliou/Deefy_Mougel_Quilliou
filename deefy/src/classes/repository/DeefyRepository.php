@@ -2,6 +2,7 @@
 namespace iutnc\deefy\repository;
 use iutnc\deefy\audio\lists as lists;
 use iutnc\deefy\audio\tracks as tracks;
+use iutnc\deefy\auth as auth;
 class DeefyRepository{
     private \PDO $pdo;
     private static ?DeefyRepository $instance = null; private static array $config = [ ];
@@ -26,7 +27,10 @@ class DeefyRepository{
     }
 
 public function findAllPlaylists(){
-    $stmt = $this ->pdo->prepare("SELECT id FROM playlist");
+    $usr = auth\AuthnProvider::getSignInUser(); 
+    $usr = $this->getIdUser($usr);
+    $stmt = $this ->pdo->prepare("SELECT playlist.id FROM playlist INNER JOIN user2playlist on id = id_pl where id_user = :usr ");
+    $stmt->bindParam(':usr', $usr);
     $stmt->execute();
     $array = [];
     $i = 0;
@@ -82,7 +86,7 @@ public function findTrackById(int $id): tracks\AudioTrack{
 
 
     public function saveEmptyPlaylist(lists\Playlist $pl): lists\Playlist {
-        $connexion = self::$instance;
+        $usr = auth\AuthnProvider::getSignInUser(); 
         $stmt = $this ->pdo->prepare("insert into playlist(nom) values(?)");
         $n = $pl->__get("nom");
         $stmt->bindParam(1,$n);
@@ -91,6 +95,11 @@ public function findTrackById(int $id): tracks\AudioTrack{
         $stmt->execute();
         $id = $stmt->fetchColumn();
         $pl->setId($id);
+        $stmt = $this->pdo->prepare("insert into user2playlist(id_user,id_pl) values(:usr,:pl)");
+        $usr = $this->getIdUser($usr);
+        $stmt->bindParam(':usr', $usr);
+        $stmt->bindParam(':pl', $id);
+        $stmt->execute();
         return $pl;
     }
     public function getPlaylist(){
@@ -205,5 +214,12 @@ public function findTrackById(int $id): tracks\AudioTrack{
         $stmt->bindParam(':pwd',$password);
         $stmt->bindParam(':role',$role);
         $stmt->execute();
+    }
+    public function getIdUser(String $email){
+        $stmt = $this ->pdo->prepare("select id from user where email = ?");
+        $stmt->bindParam(1,$email);
+        $stmt->execute();
+        $id = $stmt->fetchColumn();
+        return $id;
     }
 }
