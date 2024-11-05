@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace iutnc\deefy\loader;
 
+//Creation d'un autoloader Psr4
 class Psr4ClassLoader{
     protected $prefix;
     protected $base_dir;
