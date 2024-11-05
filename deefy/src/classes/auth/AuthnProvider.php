@@ -39,6 +39,12 @@ class AuthnProvider
                 throw new exception\AuthnException("email dangereux");
             }
         }
+    public static function getSignInUser(){
+        if (isset($_SESSION['user'])){
+            return $_SESSION['user'];
+        }
+        throw new \Exception();
+    }
  }
 
 
