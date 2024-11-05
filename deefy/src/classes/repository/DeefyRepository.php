@@ -45,7 +45,7 @@ public function findPlaylistById(int $id): lists\Playlist {
     $stmt->execute();
     $resultats = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($resultats as $row) {
-        $p = new lists\Playlist($row['nom'],[]);
+        $p = new lists\Playlist($row['nom'],$this->findAllTracks());
         $p->setId($id);
     }
     return $p;
@@ -64,12 +64,17 @@ public function findAllTracks(){
     return $array;
 }
 public function findTrackById(int $id): tracks\AudioTrack{
-    $stmt = $this ->pdo->prepare("SELECT id,titre FROM track where id = ?");
+    $stmt = $this ->pdo->prepare("SELECT * FROM track where id = ?");
     $stmt->bindParam(1,$id);
     $stmt->execute();
     $resultats = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($resultats as $row) {
-        $t = new tracks\AlbumTrack($row['titre'],"","",0,2);
+        if ($row['type'] == 'A'){
+            $t = new tracks\AlbumTrack($row['titre'],$row['filename'],$row['titre_album'],$row['numero_album'],$row['duree']);
+            $t->setArtiste($row["artiste_album"]);
+        }else{
+            $t = new tracks\PodcastTrack($row['titre'],$row['filename'],$row['auteur_podcast'],$row['date_posdcast'],$row['duree'],$row['genre']);
+        }
         $t->setId($id);
     }
     return $t;
