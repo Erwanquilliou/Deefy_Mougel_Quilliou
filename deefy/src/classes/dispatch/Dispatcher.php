@@ -42,6 +42,10 @@ class Dispatcher
                 $action = new act\RegisterAction();
                 $html = $action->execute();
                 break;
+            case 'add-track-to-playlist' :
+                $action = new act\AddTrackPlaylistAction();
+                $html = $action->execute();
+                break;
             
         }
         $this->renderPage($html);
@@ -60,9 +64,10 @@ class Dispatcher
    <h1>Deefy</h1>
    <ul>
          <li><a href="?action=default">Accueil</a></li>
-         <li><a href="?action=playlist">Afficher la playlist en session</a></li>
+         <li><a href="?action=playlist">Afficher mes playlist</a></li>
          <li><a href="?action=add-playlist">Ajouter une playlist</a></li>
-         <li><a href="?action=add-track">Ajouter une track dans la playlist</a></li>
+         <li><a href="?action=add-track">Ajouter une track</a></li>
+         <li><a href="?action=add-track-to-playlist">Ajouter une track dans une playlist</a></li>
          <li><a href="?action=signin">se connecter</a></li>
          <li><a href="?action=register">s'enregistrer</a></li>
     </ul>

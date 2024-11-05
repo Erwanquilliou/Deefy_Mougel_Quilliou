@@ -50,6 +50,31 @@ public function findPlaylistById(int $id): lists\Playlist {
     }
     return $p;
 }
+public function findAllTracks(){
+    $stmt = $this ->pdo->prepare("SELECT id FROM Track");
+    $stmt->execute();
+    $array = [];
+    $i = 0;
+    $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    foreach($results as $row){
+        $p = self::findTrackById($row['id']);
+        $array[$i] = $p;
+        $i++;
+    }
+    return $array;
+}
+public function findTrackById(int $id): tracks\AudioTrack{
+    $stmt = $this ->pdo->prepare("SELECT id,titre FROM track where id = ?");
+    $stmt->bindParam(1,$id);
+    $stmt->execute();
+    $resultats = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    foreach ($resultats as $row) {
+        $t = new tracks\AlbumTrack($row['titre'],"","",0,2);
+        $t->setId($id);
+    }
+    return $t;
+}
+
 
     public function saveEmptyPlaylist(lists\Playlist $pl): lists\Playlist {
         $connexion = self::$instance;
@@ -142,10 +167,7 @@ public function findPlaylistById(int $id): lists\Playlist {
         $stmt->bindParam(':idt', $idTr);
         $stmt->execute();
         $verifTrack = $stmt->fetchColumn(); //nombre de musique déjà dans la playlist
-        echo "1";
-        echo $verifTrack;
         if($verifTrack == 0){
-            echo "2";
             $sql = "insert into playlist2track(id_pl,id_track,no_piste_dans_liste) values(:idpl,:idt,:no)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':idpl', $idPl);
