@@ -5,6 +5,7 @@ namespace iutnc\deefy\action;
 
 use iutnc\deefy\audio\lists as lst;
 
+//Classe pour gerer l'ajout d'une playlist
 class AddPlaylistAction extends Action
 {
 

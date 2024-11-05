@@ -4,15 +4,18 @@ namespace iutnc\deefy\render;
 
 use iutnc\deefy\audio\tracks as tracks;
 
+//Renderer pour permettre l'affichage d'AlbumTrack de plusieurs maniere
 class AlbumTrackRenderer extends AudioTrackRenderer
 {
     private tracks\AlbumTrack $albumTrack;
 
+    //initialisation des attributs
     public function __construct(tracks\AlbumTrack $a)
     {
         $this->albumTrack = $a;
     }
 
+    //affichage compacte
     protected function renderCompact(): string
     {
         return "
@@ -26,6 +29,7 @@ class AlbumTrackRenderer extends AudioTrackRenderer
         ";
     }
 
+    //affichage Long
     protected function renderLong(): string
     {
         return "

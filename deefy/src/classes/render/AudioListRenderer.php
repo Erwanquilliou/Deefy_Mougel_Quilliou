@@ -5,10 +5,12 @@ namespace iutnc\deefy\render;
 use iutnc\deefy\audio\lists as lists;
 use iutnc\deefy\audio\tracks as tracks;
 
+//Renderer pour permettre l'affichage d'audioList
 class AudioListRenderer implements Renderer
 {
     private lists\AudioList $audioList;
 
+    //initialisation des attributs
     public function __construct(lists\AudioList $audioList)
     {
         $this->audioList = $audioList;
@@ -20,6 +22,7 @@ class AudioListRenderer implements Renderer
         return $this->afficher();
     }
 
+    //affichage 
     private function afficher()
     {
         $html = "<div>";

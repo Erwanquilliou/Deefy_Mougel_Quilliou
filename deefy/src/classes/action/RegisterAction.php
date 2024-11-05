@@ -6,6 +6,7 @@ namespace iutnc\deefy\action;
 use iutnc\deefy\audio\lists as lst;
 use iutnc\deefy\auth as auth;
 
+//Classe pour gerer l'inscription
 class RegisterAction extends Action
 {
 

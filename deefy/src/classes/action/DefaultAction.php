@@ -2,6 +2,7 @@
 
 namespace iutnc\deefy\action;
 
+//Classe pour gerer l'action par defaut
 class DefaultAction extends Action
 {
 

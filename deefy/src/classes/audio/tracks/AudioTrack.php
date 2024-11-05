@@ -3,14 +3,17 @@
 namespace iutnc\deefy\audio\tracks;
 use iutnc\deefy\exception as exception;
 
+//Classe abstraite qui donne les attributs et les methodes communes aux AudioTrack
 abstract class AudioTrack
 {
+    //Chaque AudioTrack a un titre, une duree, un chemin d'acces et un identifiant
     private string $titre;
     private int $duree;
     private string $nom_du_fichier;
     private int $id;
 
-    public function __construct(string $titre, string $chemin_fichier, $duree)
+    //initialisation des attributs
+    public function __construct(string $titre, string $chemin_fichier,int $duree)
     {
         $this->titre = $titre;
         $this->nom_du_fichier = $chemin_fichier;
@@ -22,6 +25,7 @@ abstract class AudioTrack
         return json_encode(get_object_vars($this), JSON_PRETTY_PRINT);
     }
 
+    //Getter pour les attributs
     public function __get(string $property): mixed
     {
         if (property_exists($this, $property)) {
@@ -31,7 +35,8 @@ abstract class AudioTrack
         }
     }
 
-    public function setDuree($d): void
+    //Setter pour la duree
+    public function setDuree(int $d): void
     {
         if($d>0){
             $this->duree = $d;
@@ -39,6 +44,8 @@ abstract class AudioTrack
             throw new exception\InvalidPropertyValueException("La durée doit être supérieure à 0");
         }
     }
+
+    //Setter pour l'identifiant
     public function setId(int $i){
         $this->id = $i;
     }

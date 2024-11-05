@@ -5,15 +5,20 @@ namespace iutnc\deefy\dispatch;
 
 use iutnc\deefy\action as act;
 
+//Classe dispatcher permettant de gerer les interactions avec le site
 class Dispatcher
 {
+    //Attribut qui contient l'action qui vient d'etre realisee
     private ?string $action = null;
 
+    //initialisation de l'action
     function __construct()
     {
         $this->action = isset($_GET['action']) ? $_GET['action'] : 'default';
     }
 
+    //fonction permettant d'executer l'action
+    //Pour chaque action, on creer un objet de l'action correspondante et on utilise sa methode execute()
     public function run(): void
     {
         $html = '';
@@ -51,6 +56,7 @@ class Dispatcher
         $this->renderPage($html);
     }
 
+    //fonction permettant d'afficher la page web
     private function renderPage(string $html): void
     {
         echo <<<HEAD
