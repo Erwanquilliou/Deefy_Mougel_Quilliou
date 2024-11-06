@@ -2,9 +2,12 @@
 namespace iutnc\deefy\auth;
 use iutnc\deefy\exception as exception;
 
+//Classe permettant le connexion et l'enregistrement de compte. 
 class AuthnProvider
 {
-    public static function signin(string $email, string $password) {
+    //Fonction permettant de se connecter. Elle prend en parametre le mail et le mot de passe de l'utilisateur
+    //et renvoie true si la connection a ete effectue
+    public static function signin(string $email, string $password): bool {
         $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
         $result = $repo -> verifIdRegister($email);
         if($result[0] == false){
@@ -18,7 +21,9 @@ class AuthnProvider
             throw new exception\AuthnException("pas réussi à se connecter");
         }
     }
-    public static function register(string $email,string $password){
+    //Fonction permettant d'enregistrer un compte. Elle prend en parametre le mail et le mot de passe de l'utilisateur
+    //et renvoie true si l'enregistrement a ete effectue
+    public static function register(string $email,string $password): bool{
             if($email=== filter_var($email, FILTER_SANITIZE_EMAIL)){
                 if (strpos($email, "@") !== false and strpos($email, ".") !== false ) {
                     $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
@@ -35,7 +40,7 @@ class AuthnProvider
                 throw new exception\AuthnException("email dangereux");
             }
         }
-    public static function getSignInUser(){
+    public static function getSignInUser(): string{
         if (isset($_SESSION['user'])){
             return $_SESSION['user'];
         }
