@@ -4,7 +4,8 @@ namespace iutnc\deefy\action;
 
 use iutnc\deefy\render as render;
 use iutnc\deefy\audio\lists\Playlist;
-
+use iutnc\deefy\auth as auth;
+use iutnc\deefy\exception as exception;
 //Classe pour gerer l'affichage d'une playlist
 class DisplayUnePlaylistAction extends Action
 {
@@ -12,23 +13,30 @@ class DisplayUnePlaylistAction extends Action
     public function execute(): string
     {
         if($this->http_method  === 'GET'){
-            $html = <<<END
-            <form method="post" action="?action=une-playlist">
-                <select name="idPlaylist">
-            END;
-            $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
-            $array = $repo->findAllPlaylists();
-            // Boucle pour générer chaque option de la liste déroulante
-            foreach ($array as $option) {
-                $text = $option->id . " ". $option->nom ;
-                $html .= "<option value=\"{$option->id}\">{$text}</option>";
-            }
+            $connect = true;
+            try{
+                auth\AuthnProvider::getSignInUser();
+            }catch(exception\AuthnException $e){
+                $html = $e->getMEssage(); $connect = false;
+            };
+            if($connect){
+                $html = <<<END
+                <form method="post" action="?action=une-playlist">
+                    <select name="idPlaylist">
+                END;
+                $array =auth\Authz::checkOwnerPlaylists();
+                // Boucle pour générer chaque option de la liste déroulante
+                foreach ($array as $option) {
+                    $text = $option->id . " ". $option->nom ;
+                    $html .= "<option value=\"{$option->id}\">{$text}</option>";
+                }
 
-            $html .= <<<END
-                </select>
-                <button type="submit">Afficher</button>
-                </form>
-            END;
+                $html .= <<<END
+                    </select>
+                    <button type="submit">Afficher</button>
+                    </form>
+                END;
+            }
         }else{
             $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
             $pl = $repo->findPlaylistById($_POST['idPlaylist']);
