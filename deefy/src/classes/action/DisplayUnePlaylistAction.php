@@ -12,7 +12,7 @@ class DisplayUnePlaylistAction extends Action
 
     public function execute(): string
     {
-        if($this->http_method  === 'GET'){
+        if(($this->http_method  === 'GET') && (!isset($_GET['idPlaylist']))){
             $connect = true;
             try{
                 auth\AuthnProvider::getSignInUser();
@@ -33,6 +33,7 @@ class DisplayUnePlaylistAction extends Action
 
                 $html .= <<<END
                     </select>
+                    <input type="hidden" name="action" value="une-playlist">
                     <button type="submit">Afficher</button>
                     </form>
                 END;
