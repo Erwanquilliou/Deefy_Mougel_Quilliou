@@ -55,6 +55,10 @@ class Dispatcher
                 $action = new act\AddTrackPlaylistAction();
                 $html = $action->execute();
                 break;
+            case 'disconnect':
+                $action = new act\DisconnectAction();
+                $html = $action->execute();
+                break;
             
         }
         $this->renderPage($html);
@@ -83,6 +87,7 @@ class Dispatcher
          <li><a href="?action=une-playlist">Afficher une playlist</a></li>
          <li><a> . . . <a></li>
          <li><a href="?action=signin">se connecter</a></li>
+         <li><a href="?action=disconnect">se deconnecter</a></li>
          <li><a href="?action=register">s'enregistrer</a></li>
     </ul>
     $html
