@@ -21,7 +21,7 @@ class DisplayUnePlaylistAction extends Action
             };
             if($connect){
                 $html = <<<END
-                <form method="post" action="?action=une-playlist">
+                <form method="get" action="?action=une-playlist">
                     <select name="idPlaylist">
                 END;
                 $array =auth\Authz::checkOwnerPlaylists();
@@ -39,7 +39,7 @@ class DisplayUnePlaylistAction extends Action
             }
         }else{
             $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
-            $pl = $repo->findPlaylistById($_POST['idPlaylist']);
+            $pl = $repo->findPlaylistById($_GET['idPlaylist']);
             $html = "<div> voici votre playlist : </div>";
             $html.="</br></br>";
             $renderer = new render\AudioListRenderer($pl);

@@ -17,7 +17,7 @@ class DeefyRepository{
     }
 
     //Getter pour l'instance
-    public static function getInstance(): DeefyRepository|null{
+    public static function getInstance(): DeefyRepository{
         if (is_null(self::$instance)) {
             self::$instance = new DeefyRepository(self::$config);
         }
