@@ -46,7 +46,7 @@ class AddTrackPlaylistAction extends Action
         }else{
             
             $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
-            $array = $repo->addTrackToPlaylist($_POST['nomPlaylist'],$_POST['nomTrack']);
+            $repo->addTrackToPlaylist($_POST['nomPlaylist'],$_POST['nomTrack']);
             $html ="<div> votre track a bien été ajouté à votre playlist <div>";
 
 
