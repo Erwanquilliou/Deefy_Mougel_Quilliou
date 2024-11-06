@@ -6,7 +6,7 @@ use iutnc\deefy\render as render;
 use iutnc\deefy\audio\lists\Playlist;
 
 //Classe pour gerer l'affichage d'une playlist
-class DisplayPlaylistAction extends Action
+class DisplayUnePlaylistAction extends Action
 {
 
     public function execute(): string
