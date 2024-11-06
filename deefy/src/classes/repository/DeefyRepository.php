@@ -26,15 +26,24 @@ class DeefyRepository{
         self::$config = [ 'database'=> $conf["database"],'user'=> $conf['username'], 'pass'=> $conf['password'],'host' =>$conf['host'],"drive"=>$conf['drive']];
     }
 
-public function findAllPlaylists(){
-    $usr = auth\AuthnProvider::getSignInUser(); 
-    $usr = $this->getIdUser($usr);
-    if(auth\Authz::checkRole($usr)){
-        $stmt = $this ->pdo->prepare("SELECT id FROM playlist");
-    }else{
-        $stmt = $this ->pdo->prepare("SELECT playlist.id FROM playlist INNER JOIN user2playlist on id = id_pl where id_user = :usr ");
-        $stmt->bindParam(':usr', $usr);
+
+public function findMultyPlaylists($usr){
+    $stmt = $this ->pdo->prepare("SELECT playlist.id FROM playlist INNER JOIN user2playlist on id = id_pl where id_user = :usr ");
+    $stmt->bindParam(':usr', $usr);
+    $stmt->execute();
+    $array = [];
+    $i = 0;
+    $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    foreach($results as $row){
+        $p = self::findPlaylistById($row['id']);
+        $array[$i] = $p;
+        $i++;
     }
+    return $array;
+}
+
+public function findAllPlaylists(){
+    $stmt = $this ->pdo->prepare("SELECT id FROM playlist");
     $stmt->execute();
     $array = [];
     $i = 0;

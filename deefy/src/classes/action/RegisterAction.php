@@ -5,6 +5,7 @@ namespace iutnc\deefy\action;
 
 use iutnc\deefy\audio\lists as lst;
 use iutnc\deefy\auth as auth;
+use iutnc\deefy\exception as exception;
 
 //Classe pour gerer l'inscription
 class RegisterAction extends Action
@@ -22,11 +23,11 @@ class RegisterAction extends Action
             END;
 
         }else{
-            
-            if(auth\AuthnProvider::register($_POST['email'],$_POST['mdp'])){
-                $html = "votre compte à été créer </div>";
-            }else{
-                return "<div>nous n'avons pas pu créer votre compte</div>";
+            try{
+            auth\AuthnProvider::register($_POST['email'],$_POST['mdp']);
+            $html = "votre compte à été créer </div>";
+            }catch(exception\AuthnException $e){
+                $html = "erreur lors de la création du compte";
             }
 
 

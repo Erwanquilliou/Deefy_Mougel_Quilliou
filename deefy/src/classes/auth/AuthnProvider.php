@@ -12,29 +12,25 @@ class AuthnProvider
                 $_SESSION['user'] = $email;
                 return true;
             }else{
-                echo "mauvais mdp";
+                throw new exception\AuthnException("echec d'authentification");
             }
         }else{
             throw new exception\AuthnException("pas réussi à se connecter");
         }
     }
     public static function register(string $email,string $password){
-            if($email=== filter_var($email, FILTER_SANITIZE_SPECIAL_CHARS)){
-                if($password === filter_var($password, FILTER_SANITIZE_SPECIAL_CHARS) and strlen($password)>10){
-                    if (strpos($email, "@") !== false and strpos($email, ".") !== false ) {
-                        $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
-                        if ($repo -> verifIdRegister($email)[0]){
-                            $repo->register($email,password_hash($password, PASSWORD_BCRYPT));
-                            return true;
-                        }else{
-                            throw new exception\AuthnException("déjà présent");
-                        }
+            if($email=== filter_var($email, FILTER_SANITIZE_EMAIL)){
+                if (strpos($email, "@") !== false and strpos($email, ".") !== false ) {
+                    $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
+                    if ($repo -> verifIdRegister($email)[0]){
+                        $repo->register($email,password_hash($password, PASSWORD_BCRYPT));
+                        return true;
                     }else{
-                        throw new exception\AuthnException("email non valide");
+                        throw new exception\AuthnException("déjà présent");
                     }
                 }else{
-                    throw new exception\AuthnException("mot de passe non valide");
-                }
+                    throw new exception\AuthnException("email non valide");
+               }
             }else{
                 throw new exception\AuthnException("email dangereux");
             }
@@ -43,7 +39,7 @@ class AuthnProvider
         if (isset($_SESSION['user'])){
             return $_SESSION['user'];
         }
-        throw new \Exception();
+        throw new exception\AuthnExeption("pas authentifié");
     }
  }
 

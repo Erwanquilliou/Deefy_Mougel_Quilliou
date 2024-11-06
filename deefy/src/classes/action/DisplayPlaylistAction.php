@@ -11,8 +11,8 @@ class DisplayPlaylistAction extends Action
 
     public function execute(): string
     {
-        $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
-        $playlists = $repo->findAllPlaylists();
+        
+        $playlists = iutnc\deefy\auth\Authz::checkOwnerPlaylist() ;
         $s = "";
         foreach ($playlists as $pl) {
             $renderer = new render\AudioListRenderer($pl);

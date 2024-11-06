@@ -10,4 +10,12 @@ class Authz{
             return false;
         }
     }
+    public static function checkOwnerPlaylist(){
+        $repo = \iutnc\deefy\repository\DeefyRepository::getInstance();
+        if(self::checkRole()){
+            return $repo->findAllPlaylist();
+        }else{
+            return $repo->findMultyPlaylist();
+        }
+    }
 }
