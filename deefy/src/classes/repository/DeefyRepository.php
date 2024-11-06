@@ -29,8 +29,12 @@ class DeefyRepository{
 public function findAllPlaylists(){
     $usr = auth\AuthnProvider::getSignInUser(); 
     $usr = $this->getIdUser($usr);
-    $stmt = $this ->pdo->prepare("SELECT playlist.id FROM playlist INNER JOIN user2playlist on id = id_pl where id_user = :usr ");
-    $stmt->bindParam(':usr', $usr);
+    if(auth\Authz::checkRole($usr)){
+        $stmt = $this ->pdo->prepare("SELECT id FROM playlist");
+    }else{
+        $stmt = $this ->pdo->prepare("SELECT playlist.id FROM playlist INNER JOIN user2playlist on id = id_pl where id_user = :usr ");
+        $stmt->bindParam(':usr', $usr);
+    }
     $stmt->execute();
     $array = [];
     $i = 0;
