@@ -27,7 +27,7 @@ class RegisterAction extends Action
             auth\AuthnProvider::register($_POST['email'],$_POST['mdp']);
             $html = "votre compte à été créer </div>";
             }catch(exception\AuthnException $e){
-                $html = "erreur lors de la création du compte";
+                $html = $e->getMessage();
             }
 
 

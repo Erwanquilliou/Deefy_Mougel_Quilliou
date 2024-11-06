@@ -39,7 +39,7 @@ class AuthnProvider
         if (isset($_SESSION['user'])){
             return $_SESSION['user'];
         }
-        throw new exception\AuthnExeption("pas authentifié");
+        throw new exception\AuthnException("pas authentifié");
     }
  }
 
