@@ -74,7 +74,7 @@ public function findTrackById(int $id): tracks\AudioTrack{
     $resultats = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($resultats as $row) {
         if ($row['type'] == 'A'){
-            $t = new tracks\AlbumTrack($row['titre'],$row['filename'],$row['titre_album'],$row['numero_album'],$row['duree']);
+            $t = new tracks\AlbumTrack($row['titre'],"music/".$row['filename'],$row['titre_album'],$row['numero_album'],$row['duree']);
             $t->setArtiste($row["artiste_album"]);
         }else{
             $t = new tracks\PodcastTrack($row['titre'],$row['filename'],$row['auteur_podcast'],$row['date_posdcast'],$row['duree'],$row['genre']);
@@ -217,6 +217,13 @@ public function findTrackById(int $id): tracks\AudioTrack{
     }
     public function getIdUser(String $email){
         $stmt = $this ->pdo->prepare("select id from user where email = ?");
+        $stmt->bindParam(1,$email);
+        $stmt->execute();
+        $id = $stmt->fetchColumn();
+        return $id;
+    }
+    public function getRoleUser(String $email){
+        $stmt = $this ->pdo->prepare("select role from user where email = ?");
         $stmt->bindParam(1,$email);
         $stmt->execute();
         $id = $stmt->fetchColumn();
