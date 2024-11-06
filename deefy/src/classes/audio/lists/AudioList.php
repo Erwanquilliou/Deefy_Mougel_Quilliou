@@ -33,7 +33,7 @@ class AudioList
     }
 
     //Getter des attributs
-    public function __get($property)
+    public function __get($property): mixed
     {
         if(property_exists($this, $property)) {
             return $this->$property;
@@ -43,7 +43,7 @@ class AudioList
     }
 
     //Setter de l'identifiant
-    public function setId(int $i){
+    public function setId(int $i): void{
         $this->id = $i;
     }
 }

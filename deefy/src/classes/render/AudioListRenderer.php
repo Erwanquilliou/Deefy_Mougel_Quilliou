@@ -23,7 +23,7 @@ class AudioListRenderer implements Renderer
     }
 
     //affichage 
-    private function afficher()
+    private function afficher(): string
     {
         $html = "<div>";
         $html .= "<h3>{$this->audioList->nom} :</h3>";

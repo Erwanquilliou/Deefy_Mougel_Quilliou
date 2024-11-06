@@ -46,7 +46,7 @@ abstract class AudioTrack
     }
 
     //Setter pour l'identifiant
-    public function setId(int $i){
+    public function setId(int $i): void{
         $this->id = $i;
     }
 }
