@@ -3,21 +3,29 @@ namespace iutnc\deefy\repository;
 use iutnc\deefy\audio\lists as lists;
 use iutnc\deefy\audio\tracks as tracks;
 use iutnc\deefy\auth as auth;
+
+//Classe gerant les interactions avec la base de donnees
 class DeefyRepository{
+    //Attributs
     private \PDO $pdo;
     private static ?DeefyRepository $instance = null; private static array $config = [ ];
+
+    //initialisation des attributs
     private function __construct(array $conf) {
         $dsn = self::$config['drive'].":host=" .self::$config['host'] . ";dbname=".self::$config['database'];
         $this->pdo = new \PDO($dsn, self::$config['user'], self::$config['pass'], [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
     }
-    public static function getInstance(){
+
+    //Getter pour l'instance
+    public static function getInstance(): DeefyRepository|null{
         if (is_null(self::$instance)) {
             self::$instance = new DeefyRepository(self::$config);
         }
         return self::$instance;
     }
 
-    public static function setConfig(string $file) {
+    //Setter de config
+    public static function setConfig(string $file): void {
         $conf = parse_ini_file($file);
         if ($conf===false) {
            throw new \Exception("Error reading configuration file");
@@ -27,7 +35,8 @@ class DeefyRepository{
     }
 
 
-public function findMultyPlaylists($usr){
+    //Fonction qui retourne les playlists d'un utilisateur
+public function findMultyPlaylists($usr): array{
     $stmt = $this ->pdo->prepare("SELECT playlist.id FROM playlist INNER JOIN user2playlist on id = id_pl where id_user = :usr ");
     $stmt->bindParam(':usr', $usr);
     $stmt->execute();
@@ -42,7 +51,8 @@ public function findMultyPlaylists($usr){
     return $array;
 }
 
-public function findAllPlaylists(){
+//Fonction qui renvoie toutes les playlists
+public function findAllPlaylists(): array{
     $stmt = $this ->pdo->prepare("SELECT id FROM playlist");
     $stmt->execute();
     $array = [];
@@ -56,6 +66,7 @@ public function findAllPlaylists(){
     return $array;
 }
 
+//Fonction qui retourne une playlist en fonction de son identifiant
 public function findPlaylistById(int $id): lists\Playlist {
     $stmt = $this ->pdo->prepare("SELECT id,nom FROM playlist where id = ?");
     $stmt->bindParam(1,$id);
@@ -67,7 +78,8 @@ public function findPlaylistById(int $id): lists\Playlist {
     }
     return $p;
 }
-public function findAllTracks(){
+//Fonction qui retourne toutes les tracks
+public function findAllTracks(): array{
     $stmt = $this ->pdo->prepare("SELECT id FROM Track");
     $stmt->execute();
     $array = [];
@@ -80,6 +92,8 @@ public function findAllTracks(){
     }
     return $array;
 }
+
+//Fonction qui retourne une track en fonction de son identifiant
 public function findTrackById(int $id): tracks\AudioTrack{
     $stmt = $this ->pdo->prepare("SELECT * FROM track where id = ?");
     $stmt->bindParam(1,$id);
@@ -97,7 +111,7 @@ public function findTrackById(int $id): tracks\AudioTrack{
     return $t;
 }
 
-
+//Fonction qui creer une playlist vide
     public function saveEmptyPlaylist(lists\Playlist $pl): lists\Playlist {
         $usr = auth\AuthnProvider::getSignInUser(); 
         $stmt = $this ->pdo->prepare("insert into playlist(nom) values(?)");
@@ -115,7 +129,9 @@ public function findTrackById(int $id): tracks\AudioTrack{
         $stmt->execute();
         return $pl;
     }
-    public function getPlaylist(){
+
+    //Fonction qui renvoie toute les playlists
+    public function getPlaylist(): array{
         $stmt = $this ->pdo->prepare("select * from Playlist");
         $stmt->execute();
         $a = [];
@@ -126,7 +142,8 @@ public function findTrackById(int $id): tracks\AudioTrack{
         return $a;
     }
 
-    public function addTrack(tracks\AudioTrack $track){
+    //Fonction qui ajoute une track
+    public function addTrack(tracks\AudioTrack $track): tracks\AudioTrack{
     
         
         $b = "iutnc\\deefy\\audio\\tracks\\AlbumTrack";
@@ -182,7 +199,9 @@ public function findTrackById(int $id): tracks\AudioTrack{
         
     
     }
-    public function addTrackToPlaylist(int $idPl, int $idTr){
+
+    //Fonction qui ajoute une track a une playlist
+    public function addTrackToPlaylist(int $idPl, int $idTr):void{
         $sql = "select count(*) from playlist2track where id_pl = :idp";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idp', $idPl);
@@ -203,6 +222,8 @@ public function findTrackById(int $id): tracks\AudioTrack{
             $stmt->execute();
         }
     }
+
+    //Fonction qui donne le mot de passe si l'email existe dans la base de donnees
     public function verifIdRegister(String $email) : array{
         $sql ="select count(*) from user where email = :email ";
         $stmt = $this->pdo->prepare($sql);
@@ -219,7 +240,8 @@ public function findTrackById(int $id): tracks\AudioTrack{
         return[false,$passwd];
     }
 
-    public function register(String $email,string $password){
+    //Fonction pour s'enregistrer
+    public function register(String $email,string $password):void{
         $sql ="insert into user(email,passwd,role) values(:email,:pwd,:role)";
         $role = 1;
         $stmt = $this->pdo->prepare($sql);
@@ -228,14 +250,17 @@ public function findTrackById(int $id): tracks\AudioTrack{
         $stmt->bindParam(':role',$role);
         $stmt->execute();
     }
-    public function getIdUser(String $email){
+
+    //Getter de l'identifiant de l'utilisateur
+    public function getIdUser(String $email):int{
         $stmt = $this ->pdo->prepare("select id from user where email = ?");
         $stmt->bindParam(1,$email);
         $stmt->execute();
         $id = $stmt->fetchColumn();
         return $id;
     }
-    public function getRoleUser(String $email){
+    //Getter du role de l'utilisateur
+    public function getRoleUser(String $email):int{
         $stmt = $this ->pdo->prepare("select role from user where email = ?");
         $stmt->bindParam(1,$email);
         $stmt->execute();
