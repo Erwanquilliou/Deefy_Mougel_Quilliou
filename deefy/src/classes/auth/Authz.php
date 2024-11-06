@@ -15,7 +15,7 @@ class Authz{
         if(self::checkRole()){
             return $repo->findAllPlaylists();
         }else{
-            return $repo->findMultyPlaylists($repo->getIdUSer($_SESSION['user']));
+            return $repo->findMultyPlaylists($repo->getIdUSer(unserialize($_SESSION['user'])->email));
         }
     }
 }

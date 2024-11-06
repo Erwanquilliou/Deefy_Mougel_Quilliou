@@ -9,7 +9,8 @@ class AuthnProvider
         $result = $repo -> verifIdRegister($email);
         if($result[0] == false){
             if(password_verify($password,$result[1])){
-                $_SESSION['user'] = $email;
+                $user = new User($repo->getIdUser($email),$email,$repo->getRoleUser($email));
+                $_SESSION['user'] = serialize($user);
                 return true;
             }else{
                 throw new exception\AuthnException("echec d'authentification");
@@ -37,7 +38,7 @@ class AuthnProvider
         }
     public static function getSignInUser(){
         if (isset($_SESSION['user'])){
-            return $_SESSION['user'];
+            return unserialize($_SESSION['user'])->email;
         }
         throw new exception\AuthnException("pas authentifié");
     }

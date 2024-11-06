@@ -25,7 +25,7 @@ class SignInAction extends Action
         }else{
             try {
                 auth\AuthnProvider::signin($_POST['email'],$_POST['mdp']);
-                $html = "<div>vous êtes connecté, bienvenue ".$_SESSION['user']."</div>";
+                $html = "<div>vous êtes connecté, bienvenue ".unserialize($_SESSION['user'])->email."</div>";
             } catch(exception\AuthnException $e){
                 $html = "erreur lors de la connexion";
             }
