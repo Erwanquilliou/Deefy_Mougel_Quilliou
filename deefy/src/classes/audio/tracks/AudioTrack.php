@@ -7,9 +7,9 @@ use iutnc\deefy\exception as exception;
 abstract class AudioTrack
 {
     //Chaque AudioTrack a un titre, une duree, un chemin d'acces et un identifiant
-    private string $titre;
+    protected string $titre;
     private int $duree;
-    private string $nom_du_fichier;
+    protected string $nom_du_fichier;
     private int $id;
 
     //initialisation des attributs
