@@ -73,10 +73,25 @@ public function findPlaylistById(int $id): lists\Playlist {
     $stmt->execute();
     $resultats = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($resultats as $row) {
-        $p = new lists\Playlist($row['nom'],$this->findAllTracks());
+        $p = new lists\Playlist($row['nom'],$this->findAllTracksPlaylist($id));
         $p->setId($id);
     }
     return $p;
+}
+
+public function findAllTracksPlaylist(int $idpl): array{
+    $stmt = $this ->pdo->prepare("SELECT id FROM Track inner join playlist2track on id = id_track where id_pl = ?");
+    $stmt->bindParam(1,$idpl);
+    $stmt->execute();
+    $array = [];
+    $i = 0;
+    $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    foreach($results as $row){
+        $p = self::findTrackById($row['id']);
+        $array[$i] = $p;
+        $i++;
+    }
+    return $array;
 }
 //Fonction qui retourne toutes les tracks
 public function findAllTracks(): array{
