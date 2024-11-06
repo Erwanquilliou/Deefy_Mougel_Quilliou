@@ -12,7 +12,11 @@ class DisconnectAction extends Action
 
     public function execute(): string
     {       
-        session_destroy();
-        return "vous avez été déconnecté";
+        if (isset( $_SESSION['user'])) {
+            session_destroy();
+            return "vous avez été déconnecté";
+        } else {
+            return "Vous n'êtes pas connecté";
+        }
     }
 }
