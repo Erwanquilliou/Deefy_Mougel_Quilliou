@@ -37,7 +37,7 @@ class AddTrackPlaylistAction extends Action
                     </select>
                     <select name="nomPlaylist">
                 END;
-                $array = $repo->findAllPlaylists();
+                $array = $repo->findMultyPlaylists(unserialize($_SESSION['user'])->id);
                 // Boucle pour générer chaque option de la liste déroulante
                 foreach ($array as $option) {
                     $text = $option->id . " ". $option->nom ;
